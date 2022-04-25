@@ -25,7 +25,7 @@ public class Program {
 		Date checkOut = dmy.parse(sc.next());
 
 		if (!checkOut.after(checkIn)) {
-			System.out.println("Operação inválida. Data de check-out deve ser maior que a data de check-in");
+			System.out.println("Operação inválida. Data de check-out deve ser posterior a data de check-in");
 		}
 
 		else {
@@ -41,22 +41,14 @@ public class Program {
 			System.out.print("Data de check-out(dd/MM/yyyy): ");
 			checkOut = dmy.parse(sc.next());
 
-			Date now = new Date();
-			if (now.after(checkIn) || now.after(checkOut)) {
-				System.out.println(
-						"Operação inválida. Data de check-out e data de check-in devem ser após a presente data.");
-			}
-			else if (checkIn.after(checkOut)) {
-				System.out.println("Operação inválida. Data de check-out deve ser maior que a data de check-in");
+			String error = reservation.updateDates(checkIn, checkOut);
+			if (error != null) {
+				System.out.println(error);
 			} 
 			else {
-				reservation.updateDates(checkIn, checkOut);
 				System.out.println("Reserva:" + reservation);
 			}
 		}
-
 		sc.close();
-
 	}
-
 }
