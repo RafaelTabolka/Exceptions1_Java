@@ -4,6 +4,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import model.exceptions.DomainException;
+
+import model.exceptions.DomainException;
 public class Reservation {
 	
 	private int roomNumber;
@@ -16,7 +19,10 @@ public class Reservation {
 		
 	}
 
-	public Reservation(int roomNumber, Date checkIn, Date checkOut) {
+	public Reservation(int roomNumber, Date checkIn, Date checkOut){
+		if (checkIn.after(checkOut)) {
+			throw new DomainException ("Operação inválida, data de check-out deve ser maior que a data de check-in");
+		} 
 		this.roomNumber = roomNumber;
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
@@ -43,18 +49,17 @@ public class Reservation {
 		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS); 
 	}
 	
-	public String updateDates (Date checkIn, Date checkOut) {
+	public void updateDates (Date checkIn, Date checkOut){
 		
 		Date now = new Date();
 		if (now.after(checkIn) || now.after(checkOut)) {
-			return "Operação inválida. Data de check-out e data de check-in devem ser após a presente data.";
+			throw new DomainException("Operação inválida, data de check-out e data de check-in devem ser após a presente data.");
 		}
 		else if (checkIn.after(checkOut)) {
-			return "Operação inválida. Data de check-out deve ser maior que a data de check-in";
+			throw new DomainException ("Operação inválida, data de check-out deve ser maior que a data de check-in");
 		} 
 		this.checkIn = checkIn;
 		this.checkOut = checkOut;
-		return null;
 	}
 	
 	@Override
